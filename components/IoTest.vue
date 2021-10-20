@@ -11,17 +11,31 @@
         </b-field>
       </div>
       <div class="column is-narrow">
-        <b-field> <b-checkbox>Case insensitive</b-checkbox> </b-field>
-        <b-field> <b-checkbox>Ingore trailing whitespace</b-checkbox> </b-field>
-        <b-field> <b-checkbox>Ignore all whitespace</b-checkbox> </b-field>
-        <b-field> <b-checkbox>Substring</b-checkbox> </b-field>
-        <b-field> <b-checkbox>Regex</b-checkbox> </b-field>
-      </div>
-      <div class="column is-narrow">
-        <b-button type="mb-1" expanded>Voornaam</b-button>
-        <b-button type="mb-1" expanded>Achternaam</b-button>
-        <b-button type="mb-1" expanded>Datum</b-button>
-        <b-button type="mb-1" expanded>Newline</b-button>
+        <div class="columns">
+          <div class="column is-narrow">
+            <b-field> <b-checkbox>Case insensitive</b-checkbox> </b-field>
+            <b-field>
+              <b-checkbox>Ingore trailing whitespace</b-checkbox>
+            </b-field>
+            <b-field> <b-checkbox>Ignore all whitespace</b-checkbox> </b-field>
+            <b-field> <b-checkbox>Substring</b-checkbox> </b-field>
+            <b-field> <b-checkbox>Regex</b-checkbox> </b-field>
+          </div>
+          <div class="column is-narrow">
+            <b-button type="mb-1" expanded>Voornaam</b-button>
+            <b-button type="mb-1" expanded>Achternaam</b-button>
+            <b-button type="mb-1" expanded>Datum</b-button>
+            <b-button type="mb-1" expanded>Newline</b-button>
+          </div>
+        </div>
+        <b-field>
+          <b-numberinput
+            step="0.5"
+            aria-minus-label="Decrement by 0.01"
+            aria-plus-label="Increment by 0.01"
+          >
+          </b-numberinput>
+        </b-field>
       </div>
     </div>
   </div>
@@ -36,6 +50,6 @@ import { getDate, getFirstname, getLastname } from "~/utils/data";
 export default class IoTest extends Vue {
   rbInput = null;
   @Prop()
-  input: string
+  input: string;
 }
 </script>

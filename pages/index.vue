@@ -14,7 +14,7 @@
         <b-button class="mb-1" @click="addInput(2)" expanded
           >Achternaam</b-button
         >
-        <b-button class="mb-1" @click="addInput(3)" expanded>Datum</b-button>
+        <b-button class="mb-1" @click="addInput(4)" expanded>Datum</b-button>
         <b-button class="mb-1" @click="addInput(5)" expanded>Newline</b-button>
       </div>
     </div>
@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "nuxt-property-decorator";
-import { getFirstname, Types } from "~/utils/data";
+import { getDate, getFirstname, getLastname, Types } from "~/utils/data";
 
 @Component({
   name: "Dashboard",
@@ -42,6 +42,16 @@ export default class Index extends Vue {
       case Types.first_name:
         this.inputs = this.inputs.map((element) => {
           return element + getFirstname();
+        });
+        break;
+      case Types.last_name:
+        this.inputs = this.inputs.map((element) => {
+          return element + getLastname();
+        });
+        break;
+      case Types.date:
+        this.inputs = this.inputs.map((element) => {
+          return element + getDate();
         });
         break;
       case Types.newline:
