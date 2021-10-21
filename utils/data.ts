@@ -1,10 +1,11 @@
 export const enum Types {
-  first_name = 1,
-  last_name = 2,
-  email = 3,
-  date = 4,
-  newline = 5,
-  number = 6
+  first_name,
+  last_name,
+  email,
+  date,
+  newline,
+  number,
+  full_name
 }
 
 const data = [
