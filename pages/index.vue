@@ -11,14 +11,21 @@
         />
       </div>
       <div class="column">
+        <b-field>
+          <b-checkbox-button v-model="addNewLine" type="is-dark">
+            <b-icon :icon="addNewLine ? `check` : `close`"></b-icon>
+            <span>Nieuwe lijn toevoegen</span>
+          </b-checkbox-button>
+        </b-field>
         <b-field v-for="(button, index) in buttons" :key="index">
-          <b-button @click="addInput(button.type)" expanded>{{
+          <b-button @click="addInput(button.type)" expanded outlined>{{
             button.content
           }}</b-button>
         </b-field>
 
         <b-field>
           <b-numberinput
+            type="is-info is-light"
             controls-alignment="left"
             controls-position="compact"
             aria-minus-label="Decrement"
@@ -28,6 +35,7 @@
           >
           </b-numberinput>
           <b-numberinput
+            type="is-info is-light"
             controls-alignment="right"
             controls-position="compact"
             aria-minus-label="Decrement"
@@ -55,22 +63,20 @@
 <script lang="ts">
 import { Vue, Component } from "nuxt-property-decorator";
 import {
-  getDate,
-  getFirstname,
-  getLastname,
-  getNumber,
-  Types
+  Types,
+  getData,
 } from "~/utils/data";
 import { Input, IoTestConfig, Options } from "~/models/IoTest";
 
 @Component({
   name: "Home",
   head: {
-    title: "Home"
-  }
+    title: "Home",
+  },
 })
 export default class Index extends Vue {
   radioButton = null;
+  addNewLine = true;
   configs: Array<Input> = [
     {
       index: 0,
@@ -85,8 +91,8 @@ export default class Index extends Vue {
         Options.ignore_trailing_whitespace,
         Options.ignore_all_whitespace,
         Options.substring,
-        Options.regex
-      ]
+        Options.regex,
+      ],
     },
     {
       index: 1,
@@ -96,7 +102,7 @@ export default class Index extends Vue {
       stdin: "",
       output: "",
       hidden: false,
-      options: []
+      options: [],
     },
     {
       index: 2,
@@ -106,7 +112,7 @@ export default class Index extends Vue {
       stdin: "",
       output: "",
       hidden: false,
-      options: []
+      options: [],
     },
     {
       index: 3,
@@ -116,7 +122,7 @@ export default class Index extends Vue {
       stdin: "",
       output: "",
       hidden: true,
-      options: []
+      options: [],
     },
     {
       index: 4,
@@ -126,7 +132,7 @@ export default class Index extends Vue {
       stdin: "",
       output: "",
       hidden: true,
-      options: []
+      options: [],
     },
     {
       index: 5,
@@ -136,8 +142,8 @@ export default class Index extends Vue {
       stdin: "",
       output: "",
       hidden: true,
-      options: []
-    }
+      options: [],
+    },
   ];
   assignmentId: number = 0;
   filename: string = "";
@@ -149,8 +155,10 @@ export default class Index extends Vue {
     { content: "Voornaam", type: Types.first_name },
     { content: "Familienaam", type: Types.last_name },
     { content: "Nieuwe lijn", type: Types.newline },
-    { content: "Geldige datum", type: Types.date },
-    { content: "Getal", type: Types.number }
+    { content: "Datum toekomst", type: Types.futureDate },
+    { content: "Datum verleden", type: Types.pastDate },
+    { content: "Datum ongeldig", type: Types.invalidDate },
+    { content: "Getal", type: Types.number },
   ];
 
   download() {
@@ -178,39 +186,12 @@ export default class Index extends Vue {
     this.configs[e.index] = e;
   }
 
-  addInput(value: Types) {
-    switch (value) {
-      case Types.first_name:
-        this.configs = this.configs.map(element => {
-          element.stdin += getFirstname();
-          return element;
-        });
-        break;
-      case Types.last_name:
-        this.configs = this.configs.map(element => {
-          element.stdin += getLastname();
-          return element;
-        });
-        break;
-      case Types.date:
-        this.configs = this.configs.map(element => {
-          element.stdin += getDate();
-          return element;
-        });
-        break;
-      case Types.newline:
-        this.configs = this.configs.map(element => {
-          element.stdin += "\n";
-          return element;
-        });
-        break;
-      case Types.number:
-        this.configs = this.configs.map(element => {
-          element.stdin += getNumber(this.min, this.max + 1);
-          return element;
-        });
-        break;
-    }
+  addInput(type: Types) {
+    this.configs = this.configs.map((element) => {
+      const newLine = this.addNewLine ? "\n" : "";
+      element.stdin += getData(type) + newLine;
+      return element;
+    });
   }
 }
 </script>

@@ -2,10 +2,12 @@ export const enum Types {
   first_name,
   last_name,
   email,
-  date,
   newline,
   number,
-  full_name
+  full_name,
+  futureDate,
+  pastDate,
+  invalidDate
 }
 
 const data = [
@@ -6015,22 +6017,39 @@ const getRandom = () => {
   return data[Math.floor(Math.random() * data.length)];
 };
 
-export const getFirstname = () => {
+export const getData = (type: Types, min?: number, max?: number) => {
+  switch (type) {
+    case Types.first_name: return getFirstname();
+    case Types.last_name: return getLastname();
+    case Types.futureDate: return randomDate(new Date(), new Date(new Date().getFullYear() + 99, 12, 31));
+    case Types.pastDate: return randomDate(new Date(new Date().getFullYear() - 99, 12, 31), new Date());
+    case Types.invalidDate: return "---";
+    case Types.newline: return "\n";
+    case Types.number: return getNumber(min!, max! + 1);
+  }
+}
+
+const getFirstname = () => {
   return getRandom().first_name;
 };
 
-export const getLastname = () => {
+const getLastname = () => {
   return getRandom().last_name;
 };
 
-export const getEmail = () => {
+const getEmail = () => {
   return getRandom().email;
 };
 
-export const getDate = () => {
-  return getRandom().date;
-};
-
-export const getNumber = (min: number, max: number) => {
+const getNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
+
+const randomDate = (start: Date, end: Date) => {  
+  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  var day = ('0' + randomDate.getDate()).slice(-2);
+  var month = ('0' + (randomDate.getMonth() + 1)).slice(-2);
+  var year = randomDate.getFullYear();
+
+  return year + '-' + month + '-' + day;
+}
