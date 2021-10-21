@@ -1,3 +1,47 @@
+const getTotalWeight = (configs: Array<Input>) => {
+  return 0;
+}
+
+const getCompleteName = (configs: Array<Input>) => {
+  return "";
+}
+
+export abstract class IoTestConfig {
+  public static CreateCompleteConfig(assignmentId: number, configs: Array<Input>): IoTest{
+
+    const visibleConfigs = configs.filter(x => !x.hidden);
+    const visibleStep: Step = {
+      description: "",
+      weight: getTotalWeight(visibleConfigs),
+      data: {
+        inputs: configs,
+        program: "mono program.exe"
+      },
+      hidden: false,
+      name: getCompleteName(visibleConfigs),
+      type: "io_test"
+    }
+
+    const hiddenConfigs = configs.filter(x => x.hidden);
+    const hiddenStep: Step = {
+      description: "",
+      weight: getTotalWeight(hiddenConfigs),
+      data: {
+        inputs: configs,
+        program: "mono program.exe"
+      },
+      hidden: true,
+      name: getCompleteName(hiddenConfigs),
+      type: "io_test"
+    }
+
+    return {
+      assignmentId,
+      steps: [visibleStep, hiddenStep]
+    }
+  }
+}
+
 export interface Input {
   name: string;
   args: string;

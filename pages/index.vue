@@ -29,7 +29,7 @@
 <script lang="ts">
 import { Vue, Component } from "nuxt-property-decorator";
 import { getDate, getFirstname, getLastname, Types } from "~/utils/data";
-import { Input, Options } from "~/models/IoTest";
+import { Input, IoTestConfig, Options } from "~/models/IoTest";
 
 @Component({
   name: "Home",
@@ -107,15 +107,15 @@ export default class Index extends Vue {
       options: []
     }
   ];
-  assignmentId = null;
-  filename = null;
+  assignmentId: number = 0;
+  filename: string = "";
 
   download() {
     var element = document.createElement("a");
     element.setAttribute(
       "href",
       "data:text/plain;charset=utf-8," +
-        encodeURIComponent(JSON.stringify({ test: "test" }))
+        encodeURIComponent(JSON.stringify(IoTestConfig.CreateCompleteConfig(this.assignmentId, this.configs)))
     );
     element.setAttribute("download", `${this.filename}.json`);
 
