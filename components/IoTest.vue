@@ -73,11 +73,11 @@ import { Input, Options } from "~/models/IoTest";
 })
 export default class IoTest extends Vue {
   rbInput = null;
-  @Prop()
-  config: Input;
+  @Prop({default: null})
+  config!: Input;
 
   @Prop()
-  index: number;
+  index!: number;
 
 get weight() {
     return this.config.weight;
