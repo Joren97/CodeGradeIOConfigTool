@@ -2,16 +2,42 @@
   <div class="section">
     <div class="columns">
       <div class="column is-9">
-        <io-test v-for="i in 6" :key="i" :config="configs[i - 1]" :index="i" 
-        @ConfigChanged="configChanged"/>
+        <io-test
+          v-for="i in 6"
+          :key="i"
+          :config="configs[i - 1]"
+          :index="i"
+          @ConfigChanged="configChanged"
+        />
       </div>
       <div class="column">
-        <b-button class="mb-1" @click="addInput(1)" expanded>Voornaam</b-button>
-        <b-button class="mb-1" @click="addInput(2)" expanded
-          >Achternaam</b-button
-        >
-        <b-button class="mb-1" @click="addInput(4)" expanded>Datum</b-button>
-        <b-button class="mb-1" @click="addInput(5)" expanded>Newline</b-button>
+        <b-field v-for="(button, index) in buttons" :key="index">
+          <b-button @click="addInput(button.type)" expanded>{{
+            button.content
+          }}</b-button>
+        </b-field>
+
+        <b-field>
+          <b-numberinput
+            controls-alignment="left"
+            controls-position="compact"
+            aria-minus-label="Decrement"
+            aria-plus-label="Increment"
+            v-model="min"
+            class="mr-1"
+          >
+          </b-numberinput>
+          <b-numberinput
+            controls-alignment="right"
+            controls-position="compact"
+            aria-minus-label="Decrement"
+            aria-plus-label="Increment"
+            v-model="max"
+            class="ml-1"
+          >
+          </b-numberinput>
+        </b-field>
+
         <b-field class="mt-5">
           <b-button expanded @click="download">Download</b-button>
         </b-field>
@@ -28,7 +54,13 @@
 
 <script lang="ts">
 import { Vue, Component } from "nuxt-property-decorator";
-import { getDate, getFirstname, getLastname, Types } from "~/utils/data";
+import {
+  getDate,
+  getFirstname,
+  getLastname,
+  getNumber,
+  Types
+} from "~/utils/data";
 import { Input, IoTestConfig, Options } from "~/models/IoTest";
 
 @Component({
@@ -53,7 +85,7 @@ export default class Index extends Vue {
         Options.ignore_trailing_whitespace,
         Options.ignore_all_whitespace,
         Options.substring,
-        Options.regex,
+        Options.regex
       ]
     },
     {
@@ -109,13 +141,28 @@ export default class Index extends Vue {
   ];
   assignmentId: number = 0;
   filename: string = "";
+  min: number = 0;
+  max: number = 10;
+
+  buttons = [
+    { content: "Volledige naam", type: Types.full_name },
+    { content: "Voornaam", type: Types.first_name },
+    { content: "Familienaam", type: Types.last_name },
+    { content: "Nieuwe lijn", type: Types.newline },
+    { content: "Geldige datum", type: Types.date },
+    { content: "Getal", type: Types.number }
+  ];
 
   download() {
     var element = document.createElement("a");
     element.setAttribute(
       "href",
       "data:text/plain;charset=utf-8," +
-        encodeURIComponent(JSON.stringify(IoTestConfig.CreateCompleteConfig(this.assignmentId, this.configs)))
+        encodeURIComponent(
+          JSON.stringify(
+            IoTestConfig.CreateCompleteConfig(this.assignmentId, this.configs)
+          )
+        )
     );
     element.setAttribute("download", `${this.filename}.json`);
 
@@ -127,17 +174,11 @@ export default class Index extends Vue {
     document.body.removeChild(element);
   }
 
-  configChanged(e: Input){
-    console.log(e.options);
-    console.log(e.hidden);
-    console.log(e.weight);
+  configChanged(e: Input) {
     this.configs[e.index] = e;
-    
   }
 
   addInput(value: Types) {
-    console.log(value);
-    console.log(Types.first_name);
     switch (value) {
       case Types.first_name:
         this.configs = this.configs.map(element => {
@@ -163,8 +204,13 @@ export default class Index extends Vue {
           return element;
         });
         break;
+      case Types.number:
+        this.configs = this.configs.map(element => {
+          element.stdin += getNumber(this.min, this.max + 1);
+          return element;
+        });
+        break;
     }
-    console.log(this.configs);
   }
 }
 </script>

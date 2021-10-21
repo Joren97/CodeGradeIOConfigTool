@@ -1,44 +1,53 @@
 const getTotalWeight = (configs: Array<Input>) => {
-  return 0;
-}
+  let total = 0;
+  configs.forEach(x => (total += x.weight));
+  return total;
+};
 
 const getCompleteName = (configs: Array<Input>) => {
-  return "";
-}
+  const indexes = configs.map(x => x.index).sort();
+  return "Test " + indexes.join();
+};
 
 export abstract class IoTestConfig {
-  public static CreateCompleteConfig(assignmentId: number, configs: Array<Input>): IoTest{
-
-    const visibleConfigs = configs.filter(x => !x.hidden);
+  public static CreateCompleteConfig(
+    assignmentId: number,
+    configs: Array<Input>
+  ): IoTest {
+    const visibleConfigs = configs.filter(x => {
+      return !x.hidden;
+    });
     const visibleStep: Step = {
       description: "",
       weight: getTotalWeight(visibleConfigs),
       data: {
-        inputs: configs,
+        inputs: visibleConfigs,
         program: "mono program.exe"
       },
       hidden: false,
       name: getCompleteName(visibleConfigs),
       type: "io_test"
-    }
+    };
 
-    const hiddenConfigs = configs.filter(x => x.hidden);
+    const hiddenConfigs = configs.filter(x => {
+      return x.hidden;
+    });
     const hiddenStep: Step = {
       description: "",
       weight: getTotalWeight(hiddenConfigs),
       data: {
-        inputs: configs,
+        inputs: hiddenConfigs,
         program: "mono program.exe"
       },
       hidden: true,
       name: getCompleteName(hiddenConfigs),
       type: "io_test"
-    }
+    };
 
     return {
       assignmentId,
       steps: [visibleStep, hiddenStep]
-    }
+    };
   }
 }
 
@@ -73,9 +82,9 @@ export interface IoTest {
 }
 
 export const enum Options {
-    case_insensitive = "case_insensitive",    
-    ignore_trailing_whitespace = "ignore_trailing_whitespace",
-	ignore_all_whitespace = "ignore_all_whitespace",
-	substring = "substring",
-	regex = "regex"
+  case_insensitive = "case_insensitive",
+  ignore_trailing_whitespace = "ignore_trailing_whitespace",
+  ignore_all_whitespace = "ignore_all_whitespace",
+  substring = "substring",
+  regex = "regex"
 }
