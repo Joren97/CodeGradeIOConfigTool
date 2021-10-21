@@ -12,6 +12,70 @@
       </div>
       <div class="column">
         <b-field>
+          <b-radio-button
+            v-model="radioButton"
+            :native-value="0"
+            type="is-dark is-outlined"
+          >
+            <b-icon icon="close"></b-icon>
+            <span>All</span>
+          </b-radio-button>
+
+          <b-radio-button
+            v-model="radioButton"
+            :native-value="1"
+            type="is-dark is-outlined"
+          >
+            <b-icon icon="check"></b-icon>
+            <span>Test 1</span>
+          </b-radio-button>
+
+          <b-radio-button
+            v-model="radioButton"
+            :native-value="2"
+            type="is-dark is-outlined"
+          >
+            <b-icon icon="check"></b-icon>
+            <span>Test 2</span>
+          </b-radio-button>
+
+          <b-radio-button
+            v-model="radioButton"
+            :native-value="3"
+            type="is-dark is-outlined"
+          >
+            <b-icon icon="check"></b-icon>
+            <span>Test 3</span>
+          </b-radio-button>
+
+          <b-radio-button
+            v-model="radioButton"
+            :native-value="4"
+            type="is-dark is-outlined"
+          >
+            <b-icon icon="check"></b-icon>
+            <span>Test 4</span>
+          </b-radio-button>
+
+          <b-radio-button
+            v-model="radioButton"
+            :native-value="5"
+            type="is-dark is-outlined"
+          >
+            <b-icon icon="check"></b-icon>
+            <span>Test 5</span>
+          </b-radio-button>
+
+          <b-radio-button
+            v-model="radioButton"
+            :native-value="6"
+            type="is-dark is-outlined"
+          >
+            <b-icon icon="check"></b-icon>
+            <span>Test 6</span>
+          </b-radio-button>
+        </b-field>
+        <b-field>
           <b-checkbox-button v-model="addNewLine" type="is-dark">
             <b-icon :icon="addNewLine ? `check` : `close`"></b-icon>
             <span>Nieuwe lijn toevoegen</span>
@@ -62,10 +126,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "nuxt-property-decorator";
-import {
-  Types,
-  getData,
-} from "~/utils/data";
+import { Types, getData } from "~/utils/data";
 import { Input, IoTestConfig, Options } from "~/models/IoTest";
 
 @Component({
@@ -75,75 +136,15 @@ import { Input, IoTestConfig, Options } from "~/models/IoTest";
   },
 })
 export default class Index extends Vue {
-  radioButton = null;
+  radioButton: number = 0;
   addNewLine = true;
   configs: Array<Input> = [
-    {
-      index: 0,
-      name: "Test 1",
-      args: "",
-      weight: 1,
-      stdin: "",
-      output: "",
-      hidden: false,
-      options: [
-        Options.case_insensitive,
-        Options.ignore_trailing_whitespace,
-        Options.ignore_all_whitespace,
-        Options.substring,
-        Options.regex,
-      ],
-    },
-    {
-      index: 1,
-      name: "Test 2",
-      args: "",
-      weight: 1,
-      stdin: "",
-      output: "",
-      hidden: false,
-      options: [],
-    },
-    {
-      index: 2,
-      name: "Test 3",
-      args: "",
-      weight: 1,
-      stdin: "",
-      output: "",
-      hidden: false,
-      options: [],
-    },
-    {
-      index: 3,
-      name: "Test 4",
-      args: "",
-      weight: 1,
-      stdin: "",
-      output: "",
-      hidden: true,
-      options: [],
-    },
-    {
-      index: 4,
-      name: "Test 5",
-      args: "",
-      weight: 1,
-      stdin: "",
-      output: "",
-      hidden: true,
-      options: [],
-    },
-    {
-      index: 5,
-      name: "Test 6",
-      args: "",
-      weight: 1,
-      stdin: "",
-      output: "",
-      hidden: true,
-      options: [],
-    },
+    new Input(0, false),
+    new Input(1, false),
+    new Input(2, false),
+    new Input(3, true),
+    new Input(4, true),
+    new Input(5, true),
   ];
   assignmentId: number = 0;
   filename: string = "";
@@ -187,11 +188,19 @@ export default class Index extends Vue {
   }
 
   addInput(type: Types) {
-    this.configs = this.configs.map((element) => {
-      const newLine = this.addNewLine ? "\n" : "";
-      element.stdin += getData(type) + newLine;
-      return element;
-    });
+    const newLine = this.addNewLine ? "\n" : "";
+    console.log(this.radioButton);
+    switch (this.radioButton) {
+      case 0:
+        this.configs = this.configs.map((element) => {
+          element.stdin += getData(type) + newLine;
+          return element;
+        });
+        break;
+      default:
+        this.configs[this.radioButton - 1].stdin += getData(type) + newLine;
+        break;
+    }
   }
 }
 </script>

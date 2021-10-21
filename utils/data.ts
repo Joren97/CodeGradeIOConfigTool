@@ -6023,9 +6023,9 @@ export const getData = (type: Types, min?: number, max?: number) => {
     case Types.last_name: return getLastname();
     case Types.futureDate: return randomDate(new Date(), new Date(new Date().getFullYear() + 99, 12, 31));
     case Types.pastDate: return randomDate(new Date(new Date().getFullYear() - 99, 12, 31), new Date());
-    case Types.invalidDate: return "---";
+    case Types.invalidDate: return getInvalidDate();
     case Types.newline: return "\n";
-    case Types.number: return getNumber(min!, max! + 1);
+    case Types.full_name: return getFirstname() + " " + getLastname();
   }
 }
 
@@ -6045,7 +6045,26 @@ const getNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
-const randomDate = (start: Date, end: Date) => {  
+const getInvalidDate = () => {
+  const randomNumber = getNumber(1, 2);
+  const validDate = new Date(new Date().getTime() + Math.random() * (new Date(new Date().getFullYear() + 99, 12, 31).getTime() - new Date().getTime()));
+  let day = validDate.getDate();
+  let month = validDate.getMonth();
+
+  if (randomNumber == 1) {
+    day += 30;
+  } else {
+    month += 30;
+  }
+
+  const dayString = ('0' + day).slice(-2);
+  const monthString = ('0' + (month + 1)).slice(-2);
+  var year = validDate.getFullYear();
+
+  return year + '-' + monthString + '-' + dayString;
+}
+
+const randomDate = (start: Date, end: Date) => {
   const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   var day = ('0' + randomDate.getDate()).slice(-2);
   var month = ('0' + (randomDate.getMonth() + 1)).slice(-2);

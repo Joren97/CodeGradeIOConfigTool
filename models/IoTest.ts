@@ -62,6 +62,25 @@ export interface Input {
   index: number;
 }
 
+export class Input {
+  constructor(public index: number, public hidden: boolean) {
+    return {
+      name: "Test " + (index + 1),
+      args: "",
+      hidden,
+      index,
+      options: [
+        Options.case_insensitive,
+        Options.ignore_trailing_whitespace,
+        Options.substring,
+      ],
+      output: "",
+      stdin: "",
+      weight: 1
+    }
+  }
+}
+
 export interface Data {
   inputs: Input[];
   program: string;

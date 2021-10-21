@@ -47,12 +47,6 @@
               <b-checkbox v-model="hidden" type="is-info">Hidden</b-checkbox>
             </b-field>
           </div>
-          <div class="column is-narrow">
-            <b-button type="mb-1" expanded>Voornaam</b-button>
-            <b-button type="mb-1" expanded>Achternaam</b-button>
-            <b-button type="mb-1" expanded>Datum</b-button>
-            <b-button type="mb-1" expanded>Newline</b-button>
-          </div>
         </div>
         <b-field>
           <b-numberinput
