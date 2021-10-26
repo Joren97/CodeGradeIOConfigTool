@@ -6045,7 +6045,6 @@ const getEmail = () => {
 };
 
 const getNumber = (min: number, max: number) => {
-  console.log("Getting number");
   
   return Math.floor(Math.random() * (max - min) + min);
 };

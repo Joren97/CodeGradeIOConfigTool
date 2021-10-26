@@ -11,7 +11,6 @@
       </div>
       <div class="column sticky-column">
         <div class="box">
-          {{radioButton}}
           <b-field>
             <b-checkbox-button
               v-for="i in amountOfCheckboxes"
@@ -173,8 +172,6 @@ export default class Index extends Vue {
 
   onChangeOfAmountOfTests = (newAmount: number) => {
     const currentAmount = this.configs.length;
-    console.log(currentAmount);
-    console.log(newAmount);
 
     if (currentAmount > newAmount) {
       this.configs.pop();
@@ -184,7 +181,6 @@ export default class Index extends Vue {
 
     this.configs = this.configs;
 
-    console.log(this.configs);
   };
 
   addInput(type: Types) {
