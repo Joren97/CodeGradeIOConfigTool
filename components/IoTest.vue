@@ -75,9 +75,6 @@ export default class IoTest extends Vue {
   @Prop({default: null})
   config!: Input;
 
-  @Prop()
-  index!: number;
-
 get weight() {
     return this.config.weight;
   }

@@ -60,6 +60,7 @@ export interface Input {
   hidden: boolean;
   options: string[];
   index: number;
+  inputSequence: string[]
 }
 
 export class Input {
@@ -76,7 +77,8 @@ export class Input {
       ],
       output: "",
       stdin: "",
-      weight: 1
+      weight: 1,
+      inputSequence: []
     }
   }
 }

@@ -3,78 +3,26 @@
     <div class="columns">
       <div class="column is-7-widescreen is-8-fullhd">
         <io-test
-          v-for="i in 6"
-          :key="i"
-          :config="configs[i - 1]"
-          :index="i"
+          v-for="(c, index) in configs"
+          :key="index"
+          :config="c"
           @ConfigChanged="configChanged"
         />
       </div>
       <div class="column sticky-column">
         <div class="box">
+          {{radioButton}}
           <b-field>
-            <b-radio-button
+            <b-checkbox-button
+              v-for="i in amountOfCheckboxes"
+              :key="i"
               v-model="radioButton"
-              :native-value="0"
-              type="is-dark is-outlined"
+              :native-value="(i-1)"
+              type="is-dark"
             >
-              <b-icon icon="close"></b-icon>
-              <span>All</span>
-            </b-radio-button>
-
-            <b-radio-button
-              v-model="radioButton"
-              :native-value="1"
-              type="is-dark is-outlined"
-            >
-              <b-icon icon="check"></b-icon>
-              <span>Test 1</span>
-            </b-radio-button>
-
-            <b-radio-button
-              v-model="radioButton"
-              :native-value="2"
-              type="is-dark is-outlined"
-            >
-              <b-icon icon="check"></b-icon>
-              <span>Test 2</span>
-            </b-radio-button>
-
-            <b-radio-button
-              v-model="radioButton"
-              :native-value="3"
-              type="is-dark is-outlined"
-            >
-              <b-icon icon="check"></b-icon>
-              <span>Test 3</span>
-            </b-radio-button>
-
-            <b-radio-button
-              v-model="radioButton"
-              :native-value="4"
-              type="is-dark is-outlined"
-            >
-              <b-icon icon="check"></b-icon>
-              <span>Test 4</span>
-            </b-radio-button>
-
-            <b-radio-button
-              v-model="radioButton"
-              :native-value="5"
-              type="is-dark is-outlined"
-            >
-              <b-icon icon="check"></b-icon>
-              <span>Test 5</span>
-            </b-radio-button>
-
-            <b-radio-button
-              v-model="radioButton"
-              :native-value="6"
-              type="is-dark is-outlined"
-            >
-              <b-icon icon="check"></b-icon>
-              <span>Test 6</span>
-            </b-radio-button>
+              <span v-if="(i-1) == 0">All</span>
+              <span v-else>Test {{i - 1}}</span>
+            </b-checkbox-button>
           </b-field>
           <b-field>
             <b-checkbox-button v-model="addNewLine" type="is-dark">
@@ -112,6 +60,29 @@
           </b-field>
         </div>
         <div class="box">
+          <b-field label="Aantal testen">
+            <b-numberinput
+              expanded
+              type="is-info is-light"
+              aria-minus-label="Decrement"
+              aria-plus-label="Increment"
+              v-model="amountOfTests"
+              @input="onChangeOfAmountOfTests"
+            >
+            </b-numberinput>
+          </b-field>
+          <b-field label="Weight per test">
+            <b-numberinput
+              expanded
+              type="is-info is-light"
+              aria-minus-label="Decrement"
+              aria-plus-label="Increment"
+              v-model="generalWeight"
+            >
+            </b-numberinput>
+          </b-field>
+        </div>
+        <div class="box">
           <b-field label="assignment ID">
             <b-input
               placeholder="AssignmentId"
@@ -133,7 +104,7 @@
 <script lang="ts">
 import { Vue, Component } from "nuxt-property-decorator";
 import { Types, getData } from "~/utils/data";
-import { Input, IoTestConfig, Options } from "~/models/IoTest";
+import { Input, IoTestConfig } from "~/models/IoTest";
 
 @Component({
   name: "Home",
@@ -142,7 +113,7 @@ import { Input, IoTestConfig, Options } from "~/models/IoTest";
   },
 })
 export default class Index extends Vue {
-  radioButton: number = 0;
+  radioButton: Array<number> = [0];
   addNewLine = true;
   configs: Array<Input> = [
     new Input(0, false),
@@ -156,17 +127,24 @@ export default class Index extends Vue {
   filename: string = "";
   min: number = 0;
   max: number = 10;
+  amountOfTests: number = 6;
+  generalWeight: number = 1;
 
   buttons = [
     { content: "Volledige naam", type: Types.full_name },
     { content: "Voornaam", type: Types.first_name },
     { content: "Familienaam", type: Types.last_name },
     { content: "Nieuwe lijn", type: Types.newline },
+    { content: "Boolean", type: Types.boolean },
     { content: "Datum toekomst", type: Types.futureDate },
     { content: "Datum verleden", type: Types.pastDate },
     { content: "Datum ongeldig", type: Types.invalidDate },
     { content: "Getal", type: Types.number },
   ];
+
+  get amountOfCheckboxes(): number {
+    return this.configs.length + 1;
+  }
 
   download() {
     var element = document.createElement("a");
@@ -193,19 +171,35 @@ export default class Index extends Vue {
     this.configs[e.index] = e;
   }
 
+  onChangeOfAmountOfTests = (newAmount: number) => {
+    const currentAmount = this.configs.length;
+    console.log(currentAmount);
+    console.log(newAmount);
+
+    if (currentAmount > newAmount) {
+      this.configs.pop();
+    } else {
+      this.configs.push(new Input(newAmount - 1, true));
+    }
+
+    this.configs = this.configs;
+
+    console.log(this.configs);
+  };
+
   addInput(type: Types) {
     const newLine = this.addNewLine ? "\n" : "";
-    console.log(this.radioButton);
-    switch (this.radioButton) {
-      case 0:
-        this.configs = this.configs.map((element) => {
-          element.stdin += getData(type) + newLine;
-          return element;
-        });
-        break;
-      default:
-        this.configs[this.radioButton - 1].stdin += getData(type) + newLine;
-        break;
+
+    if (this.radioButton.includes(0)) {
+      this.configs = this.configs.map((element) => {
+        element.stdin += getData(type, this.min, this.max) + newLine;
+        return element;
+      });
+    } else {
+      this.radioButton.forEach((index) => {
+        this.configs[index - 1].stdin +=
+          getData(type, this.min, this.max) + newLine;
+      });
     }
   }
 }

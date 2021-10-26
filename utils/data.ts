@@ -6,6 +6,7 @@ export const enum Types {
   number,
   full_name,
   futureDate,
+  boolean,
   pastDate,
   invalidDate
 }
@@ -6017,7 +6018,7 @@ const getRandom = () => {
   return data[Math.floor(Math.random() * data.length)];
 };
 
-export const getData = (type: Types, min?: number, max?: number) => {
+export const getData = (type: Types, min: number, max: number) => {
   switch (type) {
     case Types.first_name: return getFirstname();
     case Types.last_name: return getLastname();
@@ -6026,6 +6027,8 @@ export const getData = (type: Types, min?: number, max?: number) => {
     case Types.invalidDate: return getInvalidDate();
     case Types.newline: return "\n";
     case Types.full_name: return getFirstname() + " " + getLastname();
+    case Types.boolean: return getNumber(0, 2) == 1 ? true : false;
+    case Types.number: return getNumber(min!, max!);
   }
 }
 
@@ -6042,6 +6045,8 @@ const getEmail = () => {
 };
 
 const getNumber = (min: number, max: number) => {
+  console.log("Getting number");
+  
   return Math.floor(Math.random() * (max - min) + min);
 };
 
