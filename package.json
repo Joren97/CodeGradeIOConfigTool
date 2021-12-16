@@ -13,6 +13,7 @@
     "nuxt": "^2.15.7",
     "nuxt-buefy": "^0.4.8",
     "nuxt-property-decorator": "^2.9.1",
+    "vuedraggable": "^2.24.3",
     "vuex-module-decorators": "^1.0.1"
   },
   "devDependencies": {

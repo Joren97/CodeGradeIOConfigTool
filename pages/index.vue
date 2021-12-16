@@ -11,6 +11,13 @@
       </div>
       <div class="column sticky-column">
         <div class="box">
+          <draggable v-model="myArray" :empty-insert-threshhold="500" 
+          :group="{ name: 'inputs', pull: 'clone', put: false }">
+          <div class="block" v-for="element in myArray" :key="element.id">
+   {{element.value}}</div>
+</draggable>
+        </div>
+        <div class="box">
           <b-field>
             <b-checkbox-button
               v-for="i in amountOfCheckboxes"
@@ -29,12 +36,6 @@
               <span>Nieuwe lijn toevoegen</span>
             </b-checkbox-button>
           </b-field>
-          <b-field v-for="(button, index) in buttons" :key="index">
-            <b-button @click="addInput(button.type)" expanded outlined>{{
-              button.content
-            }}</b-button>
-          </b-field>
-
           <b-field>
             <b-numberinput
               type="is-info is-light"
@@ -112,6 +113,17 @@ import { Input, IoTestConfig } from "~/models/IoTest";
   },
 })
 export default class Index extends Vue {
+  myArray = [
+    { id:1, value: "Volledige naam", type: Types.full_name },
+    { id:2, value: "Voornaam", type: Types.first_name },
+    { id:3, value: "Familienaam", type: Types.last_name },
+    { id:4, value: "Nieuwe lijn", type: Types.newline },
+    { id:5, value: "Boolean", type: Types.boolean },
+    { id:6, value: "Datum toekomst", type: Types.futureDate },
+    { id:7, value: "Datum verleden", type: Types.pastDate },
+    { id:8, value: "Datum ongeldig", type: Types.invalidDate },
+    { id:9, value: "Getal", type: Types.number }
+  ];
   radioButton: Array<number> = [0];
   addNewLine = true;
   configs: Array<Input> = [
@@ -128,18 +140,6 @@ export default class Index extends Vue {
   max: number = 10;
   amountOfTests: number = 6;
   generalWeight: number = 1;
-
-  buttons = [
-    { content: "Volledige naam", type: Types.full_name },
-    { content: "Voornaam", type: Types.first_name },
-    { content: "Familienaam", type: Types.last_name },
-    { content: "Nieuwe lijn", type: Types.newline },
-    { content: "Boolean", type: Types.boolean },
-    { content: "Datum toekomst", type: Types.futureDate },
-    { content: "Datum verleden", type: Types.pastDate },
-    { content: "Datum ongeldig", type: Types.invalidDate },
-    { content: "Getal", type: Types.number },
-  ];
 
   get amountOfCheckboxes(): number {
     return this.configs.length + 1;

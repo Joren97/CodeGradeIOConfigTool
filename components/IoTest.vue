@@ -20,45 +20,42 @@
             v-model="config.output"
           ></b-input>
         </b-field>
-      </div>
-      <div class="column is-narrow">
-        <div class="columns">
-          <div class="column is-narrow">
-            <b-field>
+      </div>  
+      <div class="column">
+        <div class="box">
+          <draggable v-model="inputSequence" :empty-insert-threshhold="500" group="inputs">
+   <b-tag class="ml-1" v-for="element in inputSequence" :key="element">{{element.value}}</b-tag>
+</draggable>
+        </div>
+        </div>    
+    </div>
+    <div class="columns">
+      <div class="column">
               <b-checkbox v-model="caseInsensitive" type="is-info"
                 >Case insensitive</b-checkbox
               >
-            </b-field>
-            <b-field>
               <b-checkbox v-model="ignoreTrailingWhitespace" type="is-info"
                 >Ingore trailing whitespace</b-checkbox
               >
-            </b-field>
-            <b-field>
               <b-checkbox v-model="ignoreAllWhitespace" type="is-info"
                 >Ignore all whitespace</b-checkbox
               >
-            </b-field>
-            <b-field>
               <b-checkbox v-model="substring" type="is-info">Substring</b-checkbox>
-            </b-field>
-            <b-field> <b-checkbox v-model="regex" type="is-info">Regex</b-checkbox> </b-field>
-            <b-field>
+            
+             <b-checkbox v-model="regex" type="is-info">Regex</b-checkbox>
+            
               <b-checkbox v-model="hidden" type="is-info">Hidden</b-checkbox>
-            </b-field>
-          </div>
-        </div>
-        <b-field>
-          <b-numberinput
+            </div>
+    </div>
+    <div class="columns">
+      <div class="column"><b-numberinput
             type="is-info is-light"
             step="0.5"
             aria-minus-label="Decrement by 0.01"
             aria-plus-label="Increment by 0.01"
             v-model="weight"
           >
-          </b-numberinput>
-        </b-field>
-      </div>
+          </b-numberinput></div>
     </div>
   </div>
 </div>
@@ -66,6 +63,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "nuxt-property-decorator";
 import { Input, Options } from "~/models/IoTest";
+import { getData, Types } from "~/utils/data";
 
 @Component({
   name: "IoTest"
@@ -74,6 +72,18 @@ export default class IoTest extends Vue {
   rbInput = null;
   @Prop({default: null})
   config!: Input;
+
+  get inputSequence(): Array<{id: number, value: string, type: Types}>{
+    return this.config.inputSequence;
+  }
+
+  set inputSequence(val: Array<{id: number, value: string, type: Types}>){
+    this.config.inputSequence = val;  
+    this.config.stdin = "";  
+    this.config.inputSequence.forEach(element => {
+      this.config.stdin += getData(element.type, 0, 0) + " ";
+    });
+  }
 
 get weight() {
     return this.config.weight;

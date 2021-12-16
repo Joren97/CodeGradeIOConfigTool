@@ -1,3 +1,5 @@
+import { Types } from "~/utils/data";
+
 const getTotalWeight = (configs: Array<Input>) => {
   let total = 0;
   configs.forEach(x => (total += x.weight));
@@ -64,7 +66,7 @@ export interface Input {
   hidden: boolean;
   options: string[];
   index: number;
-  inputSequence: string[]
+  inputSequence: Array<{id: number, value: string, type: Types}>
 }
 
 export class Input {
