@@ -11,13 +11,12 @@ const getCompleteName = (configs: Array<Input>) => {
 
 export abstract class IoTestConfig {
   public static CreateCompleteConfig(
-    assignmentId: number,
     configs: Array<Input>
-  ): IoTest {
+  ): Input[] {
     const visibleConfigs = configs.filter(x => {
       return !x.hidden;
     });
-    const visibleStep: Step  = {
+    const visibleStep: Step = {
       description: "",
       weight: getTotalWeight(visibleConfigs),
       data: {
@@ -32,7 +31,7 @@ export abstract class IoTestConfig {
     const hiddenConfigs = configs.filter(x => {
       return x.hidden;
     });
-    const hiddenStep: Step =  {
+    const hiddenStep: Step = {
       description: "",
       weight: getTotalWeight(hiddenConfigs),
       data: {
@@ -44,14 +43,14 @@ export abstract class IoTestConfig {
       type: "io_test"
     };
 
-    let steps: Array<Step>= [];
+    let steps: Array<Step> = [];
     if (visibleConfigs.length > 0) steps.push(visibleStep);
     if (hiddenConfigs.length > 0) steps.push(hiddenStep);
 
-    return {
-      assignmentId,
-      steps
-    };
+    return [
+      ...hiddenConfigs,
+      ...visibleConfigs
+    ];
   }
 }
 
@@ -102,7 +101,6 @@ export interface Step {
 }
 
 export interface IoTest {
-  assignmentId: number;
   steps: Step[];
 }
 

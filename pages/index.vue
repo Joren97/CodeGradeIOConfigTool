@@ -16,11 +16,11 @@
               v-for="i in amountOfCheckboxes"
               :key="i"
               v-model="radioButton"
-              :native-value="(i-1)"
+              :native-value="i - 1"
               type="is-dark"
             >
-              <span v-if="(i-1) == 0">All</span>
-              <span v-else>Test {{i - 1}}</span>
+              <span v-if="i - 1 == 0">All</span>
+              <span v-else>Test {{ i - 1 }}</span>
             </b-checkbox-button>
           </b-field>
           <b-field>
@@ -83,10 +83,7 @@
         </div>
         <div class="box">
           <b-field label="assignment ID">
-            <b-input
-              placeholder="AssignmentId"
-              v-model="assignmentId"
-            ></b-input>
+            <b-input placeholder="AssignmentId" v-model="assignmentId"></b-input>
           </b-field>
           <b-field label="Bestandsnaam">
             <b-input placeholder="Bestandsnaam" v-model="filename"></b-input>
@@ -118,9 +115,9 @@ export default class Index extends Vue {
     new Input(0, false),
     new Input(1, false),
     new Input(2, false),
-    new Input(3, true),
-    new Input(4, true),
-    new Input(5, true),
+    new Input(3, false),
+    new Input(4, false),
+    new Input(5, false),
   ];
   assignmentId: number = 0;
   filename: string = "";
@@ -152,7 +149,8 @@ export default class Index extends Vue {
       "data:text/plain;charset=utf-8," +
         encodeURIComponent(
           JSON.stringify(
-            IoTestConfig.CreateCompleteConfig(this.assignmentId, this.configs)
+            // IoTestConfig.CreateCompleteConfig(this.assignmentId, this.configs)
+            this.configs
           )
         )
     );
@@ -180,7 +178,6 @@ export default class Index extends Vue {
     }
 
     this.configs = this.configs;
-
   };
 
   addInput(type: Types) {
@@ -193,8 +190,7 @@ export default class Index extends Vue {
       });
     } else {
       this.radioButton.forEach((index) => {
-        this.configs[index - 1].stdin +=
-          getData(type, this.min, this.max) + newLine;
+        this.configs[index - 1].stdin += getData(type, this.min, this.max) + newLine;
       });
     }
   }
