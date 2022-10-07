@@ -66,7 +66,13 @@ export interface Input {
   hidden: boolean;
   options: string[];
   index: number;
-  inputSequence: Array<{ id: number; value: string; type: Types }>;
+  inputSequence: Array<{
+    id: number;
+    value: string;
+    type: Types;
+    min?: number;
+    max?: number;
+  }>;
 }
 
 export class Input {

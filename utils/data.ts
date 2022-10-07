@@ -6019,7 +6019,7 @@ const getRandom = () => {
   return data[Math.floor(Math.random() * data.length)];
 };
 
-export const getData = (type: Types, min: number, max: number) => {
+export const getData = (type: Types, min?: number, max?: number) => {
   switch (type) {
     case Types.first_name: return getFirstname();
     case Types.last_name: return getLastname();
@@ -6047,7 +6047,7 @@ const getEmail = () => {
 };
 
 const getNumber = (min: number, max: number) => {
-  
+
   return Math.floor(Math.random() * (max - min) + min);
 };
 

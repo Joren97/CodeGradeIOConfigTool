@@ -15,18 +15,24 @@
             <b-input type="textarea" v-model="config.output"></b-input>
           </b-field>
         </div>
-        <div class="column">
-          <div class="box">
-            <draggable
-              v-model="inputSequence"
-              :empty-insert-threshhold="500"
-              group="inputs"
+        <div class="column is-flex is-flex-direction-column">
+          <draggable
+            class="box is-flex-grow-1"
+            v-model="inputSequence"
+            :empty-insert-threshhold="500"
+            group="inputs"
+          >
+            <b-tag
+              class="ml-1 is-clickable"
+              v-for="element in inputSequence"
+              :key="element"
             >
-              <b-tag class="ml-1" v-for="element in inputSequence" :key="element">{{
-                element.value
-              }}</b-tag>
-            </draggable>
-          </div>
+              {{ element.value }}
+              <span v-if="element.min != null && element.max != null"
+                >({{ element.min }}&dash;{{ element.max }})</span
+              >
+            </b-tag>
+          </draggable>
         </div>
       </div>
       <div class="columns">
@@ -83,6 +89,8 @@ export default class IoTest extends Vue {
 
   get inputSequence(): Array<{ id: number; value: string; type: Types }> {
     console.log("Getting");
+    console.log(this.config.inputSequence);
+
     const val = this.config.inputSequence;
 
     this.config.stdin = "";
@@ -97,7 +105,7 @@ export default class IoTest extends Vue {
       if (element.type == Types.sameLine) newLine = "";
       if (count == i + 1) newLine = "";
 
-      this.config.stdin += getData(element.type, this.min, this.max) + newLine;
+      this.config.stdin += getData(element.type, element.min, element.max) + newLine;
     }
     return val;
   }
