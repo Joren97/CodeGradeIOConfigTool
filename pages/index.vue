@@ -6,37 +6,26 @@
           v-for="(c, index) in configs"
           :key="index"
           :config="c"
+          :min="min"
+          :max="max"
           @ConfigChanged="configChanged"
         />
       </div>
       <div class="column sticky-column">
         <div class="box">
           <draggable v-model="myArray" :empty-insert-threshhold="500" 
-          :group="{ name: 'inputs', pull: 'clone', put: false }">
-          <div class="block" v-for="element in myArray" :key="element.id">
-   {{element.value}}</div>
-</draggable>
-        </div>
-        <div class="box">
-          <b-field>
-            <b-checkbox-button
-              v-for="i in amountOfCheckboxes"
-              :key="i"
-              v-model="radioButton"
-              :native-value="(i-1)"
-              type="is-dark"
-            >
-              <span v-if="(i-1) == 0">All</span>
-              <span v-else>Test {{i - 1}}</span>
-            </b-checkbox-button>
-          </b-field>
-          <b-field>
-            <b-checkbox-button v-model="addNewLine" type="is-dark">
-              <b-icon :icon="addNewLine ? `check` : `close`"></b-icon>
-              <span>Nieuwe lijn toevoegen</span>
-            </b-checkbox-button>
-          </b-field>
-          <b-field>
+          :group="{ name: 'inputs', pull: 'clone', put: false }" @end="onEnd">
+          <b-field v-for="element in myArray" :key="element.id">
+<div class="box p-2 is-clickable" >
+  <div class="level" v-if="element.type == 4">
+    <div class="level-left">
+      <div class="level-item">
+        {{element.value}}
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+    <b-field>
             <b-numberinput
               type="is-info is-light"
               controls-alignment="left"
@@ -44,6 +33,7 @@
               aria-minus-label="Decrement"
               aria-plus-label="Increment"
               v-model="min"
+              size="is-small"
               class="mr-1"
             >
             </b-numberinput>
@@ -54,13 +44,24 @@
               aria-minus-label="Decrement"
               aria-plus-label="Increment"
               v-model="max"
+              size="is-small"
               class="ml-1"
             >
             </b-numberinput>
           </b-field>
+
+      </div>
+    </div>
+  </div>
+  <span v-else>{{element.value}}</span>
+   </div>
+          </b-field>
+          
+</draggable>
         </div>
         <div class="box">
-          <b-field label="Aantal testen">
+          <div class="columns">
+            <div class="column"><b-field label="Aantal testen">
             <b-numberinput
               expanded
               type="is-info is-light"
@@ -80,10 +81,8 @@
               v-model="generalWeight"
             >
             </b-numberinput>
-          </b-field>
-        </div>
-        <div class="box">
-          <b-field label="assignment ID">
+          </b-field></div>
+            <div class="column"><b-field label="assignment ID">
             <b-input
               placeholder="AssignmentId"
               v-model="assignmentId"
@@ -94,7 +93,9 @@
           </b-field>
           <b-field>
             <b-button expanded @click="download">Download</b-button>
-          </b-field>
+          </b-field></div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -118,6 +119,7 @@ export default class Index extends Vue {
     { id:2, value: "Voornaam", type: Types.first_name },
     { id:3, value: "Familienaam", type: Types.last_name },
     { id:4, value: "Nieuwe lijn", type: Types.newline },
+    { id:4, value: "Zelfde lijn", type: Types.sameLine },
     { id:5, value: "Boolean", type: Types.boolean },
     { id:6, value: "Datum toekomst", type: Types.futureDate },
     { id:7, value: "Datum verleden", type: Types.pastDate },
@@ -142,7 +144,15 @@ export default class Index extends Vue {
   generalWeight: number = 1;
 
   get amountOfCheckboxes(): number {
-    return this.configs.length + 1;
+    return this.configs.length;
+  }
+
+  onEnd(e: any){
+    console.log(e);
+    const target = e.to.dataset.target;
+    console.log(target);
+
+    // this.configs[target].inputSequence;
   }
 
   download() {

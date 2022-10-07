@@ -2,12 +2,12 @@ import { Types } from "~/utils/data";
 
 const getTotalWeight = (configs: Array<Input>) => {
   let total = 0;
-  configs.forEach(x => (total += x.weight));
+  configs.forEach((x) => (total += x.weight));
   return total;
 };
 
 const getCompleteName = (configs: Array<Input>) => {
-  const indexes = configs.map(x => x.index).sort();
+  const indexes = configs.map((x) => x.index).sort();
   return "Test " + indexes.join();
 };
 
@@ -16,43 +16,43 @@ export abstract class IoTestConfig {
     assignmentId: number,
     configs: Array<Input>
   ): IoTest {
-    const visibleConfigs = configs.filter(x => {
+    const visibleConfigs = configs.filter((x) => {
       return !x.hidden;
     });
-    const visibleStep: Step  = {
+    const visibleStep: Step = {
       description: "",
       weight: getTotalWeight(visibleConfigs),
       data: {
         inputs: visibleConfigs,
-        program: "mono program.exe"
+        program: "mono program.exe",
       },
       hidden: false,
       name: getCompleteName(visibleConfigs),
-      type: "io_test"
+      type: "io_test",
     };
 
-    const hiddenConfigs = configs.filter(x => {
+    const hiddenConfigs = configs.filter((x) => {
       return x.hidden;
     });
-    const hiddenStep: Step =  {
+    const hiddenStep: Step = {
       description: "",
       weight: getTotalWeight(hiddenConfigs),
       data: {
         inputs: hiddenConfigs,
-        program: "mono program.exe"
+        program: "mono program.exe",
       },
       hidden: true,
       name: getCompleteName(hiddenConfigs),
-      type: "io_test"
+      type: "io_test",
     };
 
-    let steps: Array<Step>= [];
+    let steps: Array<Step> = [];
     if (visibleConfigs.length > 0) steps.push(visibleStep);
     if (hiddenConfigs.length > 0) steps.push(hiddenStep);
 
     return {
       assignmentId,
-      steps
+      steps,
     };
   }
 }
@@ -66,7 +66,7 @@ export interface Input {
   hidden: boolean;
   options: string[];
   index: number;
-  inputSequence: Array<{id: number, value: string, type: Types}>
+  inputSequence: Array<{ id: number; value: string; type: Types }>;
 }
 
 export class Input {
@@ -76,16 +76,12 @@ export class Input {
       args: "",
       hidden,
       index,
-      options: [
-        Options.case_insensitive,
-        Options.ignore_trailing_whitespace,
-        Options.substring,
-      ],
+      options: [Options.case, Options.trailing_whitespace, Options.substring],
       output: "",
       stdin: "",
       weight: 1,
-      inputSequence: []
-    }
+      inputSequence: [],
+    };
   }
 }
 
@@ -109,9 +105,9 @@ export interface IoTest {
 }
 
 export const enum Options {
-  case_insensitive = "case_insensitive",
-  ignore_trailing_whitespace = "ignore_trailing_whitespace",
+  case = "case",
+  trailing_whitespace = "trailing_whitespace",
   ignore_all_whitespace = "ignore_all_whitespace",
   substring = "substring",
-  regex = "regex"
+  regex = "regex",
 }

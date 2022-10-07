@@ -8,7 +8,8 @@ export const enum Types {
   futureDate,
   boolean,
   pastDate,
-  invalidDate
+  invalidDate,
+  sameLine
 }
 
 const data = [
@@ -6026,6 +6027,7 @@ export const getData = (type: Types, min: number, max: number) => {
     case Types.pastDate: return randomDate(new Date(new Date().getFullYear() - 99, 12, 31), new Date());
     case Types.invalidDate: return getInvalidDate();
     case Types.newline: return "\n";
+    case Types.sameLine: return " ";
     case Types.full_name: return getFirstname() + " " + getLastname();
     case Types.boolean: return getNumber(0, 2) == 1 ? true : false;
     case Types.number: return getNumber(min!, max!);
