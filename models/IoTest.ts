@@ -13,9 +13,8 @@ const getCompleteName = (configs: Array<Input>) => {
 
 export abstract class IoTestConfig {
   public static CreateCompleteConfig(
-    assignmentId: number,
     configs: Array<Input>
-  ): IoTest {
+  ): Array<Input> {
     const visibleConfigs = configs.filter((x) => {
       return !x.hidden;
     });
@@ -50,10 +49,7 @@ export abstract class IoTestConfig {
     if (visibleConfigs.length > 0) steps.push(visibleStep);
     if (hiddenConfigs.length > 0) steps.push(hiddenStep);
 
-    return {
-      assignmentId,
-      steps,
-    };
+    return [...visibleConfigs, ...hiddenConfigs];
   }
 }
 

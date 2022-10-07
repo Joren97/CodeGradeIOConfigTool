@@ -165,9 +165,7 @@ export default class Index extends Vue {
       "href",
       "data:text/plain;charset=utf-8," +
         encodeURIComponent(
-          JSON.stringify(
-            IoTestConfig.CreateCompleteConfig(this.assignmentId, this.configs)
-          )
+          JSON.stringify(IoTestConfig.CreateCompleteConfig(this.configs))
         )
     );
     element.setAttribute("download", `${this.filename}.json`);
